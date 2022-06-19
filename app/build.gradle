@@ -66,4 +66,10 @@ dependencies {
 
     //System
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.15.0'
+
+    //Icons
+    implementation "androidx.compose.material:material-icons-extended:1.1.1"
+
+    //SystemControl
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.15.0"
 }

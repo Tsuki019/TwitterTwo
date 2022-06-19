@@ -34,7 +34,7 @@ fun BottomNavigation(
     val bottomNavOptions = BottomNavigationOption.Items.list
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.Transparent)
             .padding(8.dp),
@@ -66,7 +66,6 @@ private fun BottomNavigationItem(
     onClick: () -> Unit
 ) {
 
-    //*TODO Pensar en el diseno del bottomBarNavidation*
     val background = if (isSelected) MaterialTheme.colors.background
     else MaterialTheme.colors.background.copy(alpha = 0.7f)
     val contentColor = if (isSelected) MaterialTheme.colors.primary
