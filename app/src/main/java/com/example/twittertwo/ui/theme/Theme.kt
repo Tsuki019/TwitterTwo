@@ -1,6 +1,5 @@
 package com.example.twittertwo.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -30,10 +29,23 @@ private val LightColorPalette = lightColors(
     */
 )
 
+private val DimColorPalette = darkColors(
+    primary = Color.White,
+    primaryVariant = Purple700,
+    secondary = Teal200,
+    background = DimBackground
+)
+
 @Composable
-fun TwitterTwoTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
+fun TwitterTwoTheme(darkTheme: Boolean, fullDark: Boolean,  content: @Composable () -> Unit) {
+    val darkThemeSelection = if (fullDark){
         DarkColorPalette
+    }else{
+        DimColorPalette
+    }
+
+    val colors = if (darkTheme) {
+        darkThemeSelection
     } else {
         LightColorPalette
     }

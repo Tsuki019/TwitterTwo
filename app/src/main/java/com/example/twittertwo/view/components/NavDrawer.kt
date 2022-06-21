@@ -11,10 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,37 +35,43 @@ import androidx.navigation.compose.rememberNavController
 import com.example.twittertwo.R
 import com.example.twittertwo.model.NavDrawerOptions
 import com.example.twittertwo.navigation.MainDestinations
+import kotlinx.coroutines.CoroutineScope
 
 val paddingTop = PaddingValues(start = 15.dp)
 
+@ExperimentalMaterialApi
 @Composable
 fun NavDrawer(
     closeDrawer: () -> Unit,
     navController: NavHostController,
+    mainNavController: NavHostController,
+    sheetState: ModalBottomSheetState,
+    scaffoldState: ScaffoldState
 ) {
 
     val isExpanded = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
     ) {
-
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             TopNavDrawer(
                 isExpanded = isExpanded
             )
             CustomDivider()
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth()
-            ){
-                item { BodyNavDrawer(
-                    navController = navController
-                ) }
-                item { CustomDivider() }
-            }
-
+            BodyNavDrawer(navController = navController)
+            BottomNavDrawer(
+                mainNavController = mainNavController,
+                sheetState = sheetState,
+                coroutineScope = coroutineScope,
+                scaffoldState = scaffoldState
+            )
         }
     }
 }
@@ -195,26 +198,88 @@ fun BodyNavDrawer(
 ) {
 
     val items = NavDrawerOptions.listOptions.list
+    val professionalOption = NavDrawerOptions.Professionals
     val settingsItems = NavDrawerOptions.listSettingsAndHelp.list
 
-    Column(
-    ) {
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.9f)
+    ){
         items.forEach {
+            item {
+                DrawerButton(
+                    icon = it.icon,
+                    label = it.option,
+                    action = {
+                        navController.navigate(route = it.destination){
+                            popUpTo(MainDestinations.HOME_FEED_ROUTE)
+                        }
+                    }
+                )
+            }
+        }
+        item { CustomDivider() }
+        item {
             DrawerButton(
-                icon = it.icon,
-                label = it.option,
+                icon = professionalOption.icon,
+                label = professionalOption.option,
                 action = {
-                    navController.navigate(route = it.destination){
+                    navController.navigate(route = professionalOption.destination){
                         popUpTo(MainDestinations.HOME_FEED_ROUTE)
                     }
                 }
             )
         }
+        item { CustomDivider() }
+        settingsItems.forEach {
+            item {
+                DrawerButton(
+                    icon = it.icon,
+                    label = it.option,
+                    action = {
+                        navController.navigate(route = it.destination){
+                            popUpTo(MainDestinations.HOME_FEED_ROUTE)
+                        }
+                    }
+                )
+            }
+        }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun BottomNavDrawer() {
+fun BottomNavDrawer(
+    mainNavController: NavHostController,
+    sheetState: ModalBottomSheetState,
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center
+    ) {
+        CustomDivider()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp, horizontal = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            ToggleThemeIconButton(
+                modifier = Modifier.fillMaxHeight(),
+                sheetState = sheetState,
+                coroutine = coroutineScope,
+                scaffoldState = scaffoldState
+            )
+            QrIconButton(
+                modifier = Modifier.fillMaxHeight(),
+                navController = mainNavController
+            )
+        }
+    }
 
 }
 
@@ -227,12 +292,14 @@ private fun DrawerButton(
 ) {
 
     Box(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .clickable { action() },
         contentAlignment = Alignment.TopStart
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(paddingTop)
                 .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.Start,
@@ -253,11 +320,13 @@ private fun DrawerButton(
     }
 }
 
+
+
 @Composable
 private fun CustomDivider() {
     Divider(
         modifier = Modifier.fillMaxWidth(),
         color = MaterialTheme.colors.primary.copy(alpha = 0.2f),
-        thickness = 0.17.dp
+        thickness = 0.8.dp
     )
 }

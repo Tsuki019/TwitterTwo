@@ -1,9 +1,13 @@
 package com.example.twittertwo.navigation
 
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.twittertwo.view.*
+import com.example.twittertwo.view.components.ThemeAppBottomSheet
 
 object MainDestinations{
 
@@ -12,16 +16,22 @@ object MainDestinations{
     const val SEARCH_FEED_ROUTE = "search_feed_option"
     const val NOTIFICATIONS_FEED_ROUTE = "notifications_feed_option"
     const val MESSAGES_FEED_ROUTE = "messages_feed_option"
+    const val APP_THEME_OPTIONS = "app_theme_options"
 }
 
 /**
  * Main Navigation
  **/
 
-fun NavGraphBuilder.addFeed(){
+@ExperimentalMaterialApi
+fun NavGraphBuilder.addFeed(
+    mainNavController: NavHostController,
+){
 
     composable(route = MainDestinations.FEED_ROUTE){
-        Feed()
+        Feed(
+            mainNavController = mainNavController
+        )
     }
 }
 
@@ -56,3 +66,14 @@ fun NavGraphBuilder.addMessages(){
         MessageView()
     }
 }
+
+/**
+ * Others Routes
+ **/
+
+//@ExperimentalMaterialApi
+//fun NavGraphBuilder.addAppTheme(){
+//    composable(route= MainDestinations.APP_THEME_OPTIONS){
+//        ThemeAppBottomSheet()
+//    }
+//}

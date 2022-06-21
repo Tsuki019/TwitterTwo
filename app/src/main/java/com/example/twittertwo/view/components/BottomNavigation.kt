@@ -7,10 +7,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +39,6 @@ fun BottomNavigation(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-
         bottomNavOptions.forEach {
             BottomNavigationItem(
                 item = it,
@@ -57,6 +54,7 @@ fun BottomNavigation(
             }
         }
     }
+
 }
 
 @Composable
@@ -72,12 +70,12 @@ private fun BottomNavigationItem(
     else MaterialTheme.colors.primary.copy(alpha = 0.7f)
 
 
-    Surface(color = MaterialTheme.colors.background) {
+    Surface(color = Color.Transparent) {
         Box(
             modifier = Modifier
                 .border(color = contentColor, width = 1.dp, shape = CircleShape)
                 .clip(CircleShape)
-                .background(background)
+                .background(Color.Transparent)
                 .clickable(onClick = onClick))
         {
             Row(
@@ -106,7 +104,10 @@ private fun BottomNavigationItem(
 @Composable
 fun BottomNavigationItemSelectedTest() {
 
-    TwitterTwoTheme {
+    TwitterTwoTheme(
+        darkTheme = false,
+        fullDark = false
+    ) {
         Box(
             modifier = Modifier
                 .width(200.dp)
@@ -137,12 +138,15 @@ fun BottomNavigationItemSelectedTest() {
 @Composable
 fun BottomNavigationItemUnselectedTest2() {
 
-    TwitterTwoTheme {
+    TwitterTwoTheme(
+        darkTheme = true,
+        fullDark = false
+    ) {
         Box(
             modifier = Modifier
                 .width(200.dp)
                 .height(100.dp)
-                .background(color = MaterialTheme.colors.background),
+                .background(color = Color.Transparent),
             contentAlignment = Alignment.Center
         ){
             Row (horizontalArrangement = Arrangement.spacedBy(5.dp)){
