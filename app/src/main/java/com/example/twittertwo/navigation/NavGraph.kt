@@ -2,6 +2,7 @@ package com.example.twittertwo.navigation
 
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -26,11 +27,15 @@ object MainDestinations{
 @ExperimentalMaterialApi
 fun NavGraphBuilder.addFeed(
     mainNavController: NavHostController,
+    isDarkTheme: MutableState<Boolean>,
+    isLightsOut: MutableState<Boolean>
 ){
 
     composable(route = MainDestinations.FEED_ROUTE){
         Feed(
-            mainNavController = mainNavController
+            mainNavController = mainNavController,
+            isDarkTheme= isDarkTheme,
+            isLightsOut= isLightsOut
         )
     }
 }

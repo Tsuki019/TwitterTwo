@@ -1,5 +1,6 @@
 package com.example.twittertwo.view.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -42,7 +44,6 @@ val paddingTop = PaddingValues(start = 15.dp)
 @ExperimentalMaterialApi
 @Composable
 fun NavDrawer(
-    closeDrawer: () -> Unit,
     navController: NavHostController,
     mainNavController: NavHostController,
     sheetState: ModalBottomSheetState,
@@ -65,7 +66,10 @@ fun NavDrawer(
                 isExpanded = isExpanded
             )
             CustomDivider()
-            BodyNavDrawer(navController = navController)
+            BodyNavDrawer(
+                navController = navController,
+                isExpanded = isExpanded
+            )
             BottomNavDrawer(
                 mainNavController = mainNavController,
                 sheetState = sheetState,
@@ -100,14 +104,16 @@ fun TopNavDrawer(
                 contentScale = ContentScale.FillBounds
             )
 
-            Image(modifier= Modifier
-                .width(50.dp)
-                .height(50.dp)
-                .clip(shape = CircleShape),
-                painter = painterResource(id = R.drawable.avatar_test_2),
-                contentDescription = "",
-                contentScale = ContentScale.FillBounds
-            )
+            if (!isExpanded.value){
+                Image(modifier= Modifier
+                    .width(50.dp)
+                    .height(50.dp)
+                    .clip(shape = CircleShape),
+                    painter = painterResource(id = R.drawable.avatar_test_2),
+                    contentDescription = "",
+                    contentScale = ContentScale.FillBounds
+                )
+            }
         }
 
         Row(
@@ -127,7 +133,7 @@ fun TopNavDrawer(
                     fontWeight = FontWeight.Black
                 )
                 Text(
-                    text = "@${stringResource(id = R.string.user_name_test)}",
+                    text = "@${stringResource(id = R.string.user_test)}",
                     color = MaterialTheme.colors.primary.copy(alpha = 0.8f),
                 )
             }
@@ -194,7 +200,8 @@ fun TopNavDrawer(
 
 @Composable
 fun BodyNavDrawer(
-    navController: NavHostController
+    navController: NavHostController,
+    isExpanded: MutableState<Boolean>
 ) {
 
     val items = NavDrawerOptions.listOptions.list
@@ -207,45 +214,88 @@ fun BodyNavDrawer(
             .fillMaxWidth()
             .fillMaxHeight(0.9f)
     ){
-        items.forEach {
+        if (!isExpanded.value){
+            items.forEach {
+                item {
+                    DrawerButton(
+                        icon = it.icon,
+                        label = it.option,
+                        action = {
+                            navController.navigate(route = it.destination){
+                                popUpTo(MainDestinations.HOME_FEED_ROUTE)
+                            }
+                        }
+                    )
+                }
+            }
+            item { CustomDivider() }
             item {
                 DrawerButton(
-                    icon = it.icon,
-                    label = it.option,
+                    icon = professionalOption.icon,
+                    label = professionalOption.option,
                     action = {
-                        navController.navigate(route = it.destination){
+                        navController.navigate(route = professionalOption.destination){
                             popUpTo(MainDestinations.HOME_FEED_ROUTE)
                         }
                     }
                 )
             }
-        }
-        item { CustomDivider() }
-        item {
-            DrawerButton(
-                icon = professionalOption.icon,
-                label = professionalOption.option,
-                action = {
-                    navController.navigate(route = professionalOption.destination){
-                        popUpTo(MainDestinations.HOME_FEED_ROUTE)
+            item { CustomDivider() }
+            settingsItems.forEach {
+                item {
+                    DrawerButton(
+                        icon = it.icon,
+                        label = it.option,
+                        action = {
+                            navController.navigate(route = it.destination){
+                                popUpTo(MainDestinations.HOME_FEED_ROUTE)
+                            }
+                        }
+                    )
+                }
+            }
+        }else{
+            item {
+                AnimatedVisibility(visible = isExpanded.value) {
+                    Column(
+                       modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp)
+                        ) {
+                            AccountItem(
+                                modifier = Modifier.padding(vertical = 10.dp),
+                                image = painterResource(id = R.drawable.avatar_test_2),
+                                user = stringResource(id = R.string.user2_test),
+                                userName = stringResource(id = R.string.user_name2_test)
+                            )
+                        }
+                        CustomDivider()
+                        ClickableText(
+                            modifier = Modifier.padding(start = 20.dp).padding(vertical = 10.dp),
+                            style = TextStyle(
+                                color = MaterialTheme.colors.primary,
+                                fontSize = MaterialTheme.typography.body1.fontSize
+                            ),
+                            text = buildAnnotatedString { append("Create a new account") }
+                        )
+                        {}
+                        ClickableText(
+                            modifier = Modifier.padding(start = 20.dp).padding(vertical = 10.dp),
+                            style = TextStyle(
+                                color = MaterialTheme.colors.primary,
+                                fontSize = MaterialTheme.typography.body1.fontSize
+                            ),
+                            text = buildAnnotatedString { append("Add an existing account") }
+                        )
+                        {}
                     }
                 }
-            )
-        }
-        item { CustomDivider() }
-        settingsItems.forEach {
-            item {
-                DrawerButton(
-                    icon = it.icon,
-                    label = it.option,
-                    action = {
-                        navController.navigate(route = it.destination){
-                            popUpTo(MainDestinations.HOME_FEED_ROUTE)
-                        }
-                    }
-                )
             }
         }
+
     }
 }
 
@@ -320,13 +370,37 @@ private fun DrawerButton(
     }
 }
 
-
-
 @Composable
-private fun CustomDivider() {
-    Divider(
-        modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.primary.copy(alpha = 0.2f),
-        thickness = 0.8.dp
-    )
+fun AccountItem(
+    modifier: Modifier = Modifier,
+    image: Painter,
+    userName: String,
+    user: String
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(25.dp)
+    ) {
+        Image(modifier= Modifier
+            .width(50.dp)
+            .height(50.dp)
+            .clip(shape = CircleShape),
+            painter = image,
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds
+        )
+        Column{
+            Text(
+                text = userName,
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Black
+            )
+            Text(
+                text = "@$user",
+                color = MaterialTheme.colors.primary.copy(alpha = 0.8f),
+            )
+        }
+    }
+
 }

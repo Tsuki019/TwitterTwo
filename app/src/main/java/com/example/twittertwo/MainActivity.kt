@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
@@ -32,12 +33,13 @@ class MainActivity : ComponentActivity() {
             val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route ?: MainDestinations.HOME_FEED_ROUTE
             val prefs = UserPreferences(context = applicationContext)
-            val isDarkTheme = remember { mutableStateOf( prefs.getTheme()) }
-            val isFullDark = remember { mutableStateOf(prefs.getFullDarkTheme()) }
+            val isDarkTheme = remember { mutableStateOf( prefs.getTheme() ) }
+            val isLighstOut = remember { mutableStateOf(prefs.getFullDarkTheme() ) }
+
 
             TwitterTwoTheme(
                 darkTheme = isDarkTheme.value,
-                fullDark =  isFullDark.value
+                fullDark =  isLighstOut.value
             ) {
 
                 val systemUiController = rememberSystemUiController()
@@ -63,7 +65,9 @@ class MainActivity : ComponentActivity() {
                         startDestination = MainDestinations.FEED_ROUTE
                     ){
                         addFeed(
-                            mainNavController = mainNavController
+                            mainNavController = mainNavController,
+                            isDarkTheme = isDarkTheme,
+                            isLightsOut = isLighstOut
                         )
                     }
                 }

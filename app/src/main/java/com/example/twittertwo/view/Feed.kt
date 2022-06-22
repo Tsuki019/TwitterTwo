@@ -3,6 +3,7 @@ package com.example.twittertwo.view
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -17,7 +18,9 @@ import com.example.twittertwo.view.components.ThemeAppBottomSheet
 @ExperimentalMaterialApi
 @Composable
 fun Feed(
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
+    isDarkTheme: MutableState<Boolean>,
+    isLightsOut: MutableState<Boolean>
 ) {
 
     val navController = rememberNavController()
@@ -26,9 +29,11 @@ fun Feed(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scaffoldState = rememberScaffoldState()
 
-    Surface() {
+    Surface {
         ThemeAppBottomSheet(
             sheetState = sheetState,
+            isDarkTheme = isDarkTheme,
+            isLightsOut = isLightsOut
         ) {
             MainFeedContent(
                 navController = navController,
@@ -54,11 +59,10 @@ private fun MainFeedContent(
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = { NavDrawer(
-            closeDrawer = {},
             navController = navController,
             mainNavController = mainNavController,
             sheetState = sheetState,
-            scaffoldState= scaffoldState,
+            scaffoldState= scaffoldState
         )},
         drawerShape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp),
         bottomBar = {
