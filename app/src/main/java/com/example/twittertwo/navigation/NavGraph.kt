@@ -1,5 +1,8 @@
 package com.example.twittertwo.navigation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.MutableState
@@ -7,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.example.twittertwo.ViewModel.ScrollStateViewModel
 import com.example.twittertwo.view.*
 import com.example.twittertwo.view.components.ThemeAppBottomSheet
 
@@ -24,18 +28,21 @@ object MainDestinations{
  * Main Navigation
  **/
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 fun NavGraphBuilder.addFeed(
     mainNavController: NavHostController,
     isDarkTheme: MutableState<Boolean>,
-    isLightsOut: MutableState<Boolean>
+    isLightsOut: MutableState<Boolean>,
+    scrollStateVM : ScrollStateViewModel
 ){
 
     composable(route = MainDestinations.FEED_ROUTE){
         Feed(
             mainNavController = mainNavController,
             isDarkTheme= isDarkTheme,
-            isLightsOut= isLightsOut
+            isLightsOut= isLightsOut,
+            scrollStateVM = scrollStateVM
         )
     }
 }
@@ -44,10 +51,17 @@ fun NavGraphBuilder.addFeed(
  * Feed Navigation
  **/
 
-fun NavGraphBuilder.addHome(){
+@ExperimentalFoundationApi
+fun NavGraphBuilder.addHome(
+    scrollState : LazyListState,
+    scrollUpState: MutableState<Boolean>
+){
 
     composable(route = MainDestinations.HOME_FEED_ROUTE){
-        HomeView()
+        HomeView(
+            scrollState = scrollState,
+            scrollUpState = scrollUpState
+        )
     }
 }
 

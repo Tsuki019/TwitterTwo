@@ -2,6 +2,7 @@ package com.example.twittertwo.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -91,36 +92,44 @@ fun BottomSheetContent(
         CustomDivider(
             modifier = Modifier.padding(vertical = 10.dp)
         )
-        OptionsDarkTheme(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = optionsPadding),
-            optionsList = listOf("Off", "On", "Use device settings"),
-            option = theme,
-            prefs = prefs,
-            isDarkTheme = isDarkTheme,
-            isLightsOut = isLightsOut
-        )
-        CustomDivider(
-            modifier = Modifier.padding(vertical = 10.dp)
-        )
-        Text(
-            modifier= Modifier.padding(start = titlePadding),
-            text = "Dark theme",
-            color = MaterialTheme.colors.primary,
-            fontSize = MaterialTheme.typography.h6.fontSize,
-            fontWeight = FontWeight.Bold
-        )
-        OptionsDarkTheme(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = optionsPadding),
-            optionsList = listOf("Dim", "Lights out"),
-            option = darkTheme,
-            prefs = prefs,
-            isDarkTheme = isDarkTheme,
-            isLightsOut = isLightsOut
-        )
+        LazyColumn(){
+            item {
+                OptionsDarkTheme(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = optionsPadding),
+                    optionsList = listOf("Off", "On", "Use device settings"),
+                    option = theme,
+                    prefs = prefs,
+                    isDarkTheme = isDarkTheme,
+                    isLightsOut = isLightsOut
+                )
+                CustomDivider(
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
+            }
+            item {
+                Text(
+                    modifier= Modifier.padding(start = titlePadding),
+                    text = "Dark theme",
+                    color = MaterialTheme.colors.primary,
+                    fontSize = MaterialTheme.typography.h6.fontSize,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            item {
+                OptionsDarkTheme(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = optionsPadding),
+                    optionsList = listOf("Dim", "Lights out"),
+                    option = darkTheme,
+                    prefs = prefs,
+                    isDarkTheme = isDarkTheme,
+                    isLightsOut = isLightsOut
+                )
+            }
+        }
     }
 }
 

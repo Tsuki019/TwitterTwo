@@ -75,7 +75,7 @@ private fun BottomNavigationItem(
             modifier = Modifier
                 .border(color = contentColor, width = 1.dp, shape = CircleShape)
                 .clip(CircleShape)
-                .background(Color.Transparent)
+                .background(MaterialTheme.colors.background)
                 .clickable(onClick = onClick))
         {
             Row(

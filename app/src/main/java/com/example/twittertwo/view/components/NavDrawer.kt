@@ -14,8 +14,10 @@ import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -58,6 +61,7 @@ fun NavDrawer(
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -274,7 +278,9 @@ fun BodyNavDrawer(
                         }
                         CustomDivider()
                         ClickableText(
-                            modifier = Modifier.padding(start = 20.dp).padding(vertical = 10.dp),
+                            modifier = Modifier
+                                .padding(start = 20.dp)
+                                .padding(vertical = 10.dp),
                             style = TextStyle(
                                 color = MaterialTheme.colors.primary,
                                 fontSize = MaterialTheme.typography.body1.fontSize
@@ -283,7 +289,9 @@ fun BodyNavDrawer(
                         )
                         {}
                         ClickableText(
-                            modifier = Modifier.padding(start = 20.dp).padding(vertical = 10.dp),
+                            modifier = Modifier
+                                .padding(start = 20.dp)
+                                .padding(vertical = 10.dp),
                             style = TextStyle(
                                 color = MaterialTheme.colors.primary,
                                 fontSize = MaterialTheme.typography.body1.fontSize
@@ -308,7 +316,9 @@ fun BottomNavDrawer(
     scaffoldState: ScaffoldState
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
         verticalArrangement = Arrangement.Center
     ) {
         CustomDivider()

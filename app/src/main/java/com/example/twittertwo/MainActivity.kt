@@ -3,6 +3,8 @@ package com.example.twittertwo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.twittertwo.ViewModel.ScrollStateViewModel
 import com.example.twittertwo.core.UserPreferences
 import com.example.twittertwo.navigation.*
 import com.example.twittertwo.ui.theme.TwitterTwoTheme
 import com.example.twittertwo.view.components.ThemeAppBottomSheet
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,7 @@ class MainActivity : ComponentActivity() {
             val prefs = UserPreferences(context = applicationContext)
             val isDarkTheme = remember { mutableStateOf( prefs.getTheme() ) }
             val isLighstOut = remember { mutableStateOf(prefs.getFullDarkTheme() ) }
-
+            val scrollStateVM : ScrollStateViewModel by viewModels()
 
             TwitterTwoTheme(
                 darkTheme = isDarkTheme.value,
@@ -67,7 +70,8 @@ class MainActivity : ComponentActivity() {
                         addFeed(
                             mainNavController = mainNavController,
                             isDarkTheme = isDarkTheme,
-                            isLightsOut = isLighstOut
+                            isLightsOut = isLighstOut,
+                            scrollStateVM = scrollStateVM
                         )
                     }
                 }

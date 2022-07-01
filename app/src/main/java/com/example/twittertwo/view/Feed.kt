@@ -1,5 +1,7 @@
 package com.example.twittertwo.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,17 +12,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.twittertwo.ViewModel.ScrollStateViewModel
 import com.example.twittertwo.navigation.*
-import com.example.twittertwo.view.components.BottomNavigation
-import com.example.twittertwo.view.components.NavDrawer
-import com.example.twittertwo.view.components.ThemeAppBottomSheet
+import com.example.twittertwo.view.components.*
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
 fun Feed(
     mainNavController: NavHostController,
     isDarkTheme: MutableState<Boolean>,
-    isLightsOut: MutableState<Boolean>
+    isLightsOut: MutableState<Boolean>,
+    scrollStateVM: ScrollStateViewModel
 ) {
 
     val navController = rememberNavController()
@@ -40,13 +43,15 @@ fun Feed(
                 mainNavController = mainNavController,
                 sheetState = sheetState,
                 currentRoute = currentRoute,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                scrollStateVM = scrollStateVM
             )
         }
     }
 }
 
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
 private fun MainFeedContent(
@@ -54,8 +59,15 @@ private fun MainFeedContent(
     mainNavController: NavHostController,
     sheetState: ModalBottomSheetState,
     currentRoute: String,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    scrollStateVM: ScrollStateViewModel
 ) {
+
+    val scrollState = rememberLazyListState()
+    val scrollUpState = scrollStateVM.scrollUp
+
+    scrollStateVM.updateScrollPosition(scrollState.firstVisibleItemIndex)
+
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = { NavDrawer(
@@ -71,13 +83,15 @@ private fun MainFeedContent(
                 currentRoute = currentRoute
             ) },
         backgroundColor = MaterialTheme.colors.background,
-
-        ) {
+    ) {
         NavHost(
             navController = navController,
             startDestination = MainDestinations.HOME_FEED_ROUTE
         ){
-            addHome()
+            addHome(
+                scrollState = scrollState,
+                scrollUpState = scrollUpState
+            )
             addSearch()
             addNotifications()
             addMessages()
