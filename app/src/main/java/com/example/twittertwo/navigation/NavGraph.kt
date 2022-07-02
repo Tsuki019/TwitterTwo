@@ -65,24 +65,44 @@ fun NavGraphBuilder.addHome(
     }
 }
 
-fun NavGraphBuilder.addSearch(){
+fun NavGraphBuilder.addSearch(
+    scrollState : LazyListState,
+    scrollUpState: MutableState<Boolean>,
+    navHostController: NavHostController
+){
 
     composable(route = MainDestinations.SEARCH_FEED_ROUTE){
-        SearchView()
+        SearchView(
+            scrollState = scrollState,
+            scrollUpState = scrollUpState,
+            onBack = {navHostController.popBackStack()}
+        )
     }
 }
 
-fun NavGraphBuilder.addNotifications(){
+fun NavGraphBuilder.addNotifications(
+    scrollState : LazyListState,
+    scrollUpState: MutableState<Boolean>
+){
 
     composable(route = MainDestinations.NOTIFICATIONS_FEED_ROUTE){
-        NotificationsView()
+        NotificationsView(
+            scrollState = scrollState,
+            scrollUpState = scrollUpState
+        )
     }
 }
 
-fun NavGraphBuilder.addMessages(){
+fun NavGraphBuilder.addMessages(
+    scrollState : LazyListState,
+    scrollUpState: MutableState<Boolean>
+){
 
     composable(route = MainDestinations.MESSAGES_FEED_ROUTE){
-        MessageView()
+        MessageView(
+            scrollState = scrollState,
+            scrollUpState = scrollUpState
+        )
     }
 }
 

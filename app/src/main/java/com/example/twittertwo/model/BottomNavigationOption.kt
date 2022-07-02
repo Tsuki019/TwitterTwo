@@ -38,7 +38,7 @@ sealed class BottomNavigationOption(
 
     object Notifications: BottomNavigationOption(
         id = "notifications",
-        text = "Notis",
+        text = "Notifications",
         iconSelected = Icons.Filled.Notifications,
         iconUnselected = Icons.Rounded.Notifications,
         destination = MainDestinations.NOTIFICATIONS_FEED_ROUTE

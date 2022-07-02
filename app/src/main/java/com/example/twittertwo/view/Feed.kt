@@ -92,9 +92,19 @@ private fun MainFeedContent(
                 scrollState = scrollState,
                 scrollUpState = scrollUpState
             )
-            addSearch()
-            addNotifications()
-            addMessages()
+            addSearch(
+                scrollState = scrollState,
+                scrollUpState = scrollUpState,
+                navHostController = navController
+            )
+            addNotifications(
+                scrollState = scrollState,
+                scrollUpState = scrollUpState
+            )
+            addMessages(
+                scrollState = scrollState,
+                scrollUpState = scrollUpState
+            )
         }
     }
 }

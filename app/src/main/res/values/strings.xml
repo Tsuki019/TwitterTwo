@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">TwitterTwo</string>
 
+    <string name="TopBarButtonSearch">Search Twitter</string>
+    <string name="TopBarButtonMessages">Search Direct Messages</string>
+
 
 
 <!-- Test Strings  -->

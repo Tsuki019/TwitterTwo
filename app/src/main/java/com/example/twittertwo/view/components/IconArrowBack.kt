@@ -1,29 +1,28 @@
 package com.example.twittertwo.view.components
 
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 
 @Composable
-fun IconSwitchTopBar(
+fun IconButtonArrowBack(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    color: Color = MaterialTheme.colors.primary,
+    onBack: () -> Unit
 ) {
     IconButton(
-        onClick = { onClick() },
+        onClick = { onBack() },
         modifier = modifier
-            .rotate(180f),
     ) {
         Icon(
-            imageVector = Icons.Outlined.AutoAwesome,
-            contentDescription = "",
-            tint = MaterialTheme.colors.primary
+            imageVector = Icons.Rounded.ArrowBack,
+            contentDescription = null,
+            tint = color
         )
     }
 }
